@@ -1,6 +1,6 @@
 ## Introduce
 
-This project uses Nextjs 13, React，Socket.io，Prisma，Tailwind，Shadcn-ui，MySQL，Clerk，Zod
+This project uses Nextjs 13, React，Socket.io，Prisma，Tailwind，Shadcn-ui，MySQL，Clerk，Zod，Uploadthing
 
 After the git clone, create an `.env` file and add the following content:
 
@@ -14,6 +14,8 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
 
+UPLOADTHING_SECRET=your-uploadthing-secret
+UPLOADTHING_APP_ID=your-uploadthing-app-id
 
 DATABASE_URL="mysql://your-name:your-password@host-address:port/database"
 ```
@@ -29,7 +31,7 @@ npx prisma db push
 
 These two commands will create a table and push it to a remote database
 
-Second, you need to download and run according to your package manager: 
+Second, you need to download and run according to your package manager:
 
 ```bash
 # npm
