@@ -12,9 +12,15 @@ interface FileUploadProps {
 	value: string
 	onChange: (url?: string) => void
 }
+/**
+ *
+ * @param param0
+ * @returns 上传图片组件
+ */
 const FileUpload = ({ endpoint, value, onChange }: FileUploadProps) => {
 	const fileType = value?.split(".").pop()
 
+	// 如果上传了图片，则预览上传的图片
 	if (value && fileType !== "pdf") {
 		return (
 			<div className='relative h-20 w-20'>
@@ -32,13 +38,14 @@ const FileUpload = ({ endpoint, value, onChange }: FileUploadProps) => {
 	}
 
 	return (
+		// 上传图片
 		<UploadDropzone
 			endpoint={endpoint}
 			onClientUploadComplete={(res) => {
 				onChange(res?.[0].url)
 			}}
 			onUploadError={(error: Error) => {
-				console.log(error)
+				console.log("文件上传失败或文件大于4MB", error)
 			}}
 		/>
 	)
