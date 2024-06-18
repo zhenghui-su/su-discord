@@ -3,7 +3,6 @@ const nextConfig = {
 	images: {
 		domains: ["uploadthing.com", "utfs.io"],
 	},
-	distDir: "dist",
 	env: {
 		NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
 			process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
