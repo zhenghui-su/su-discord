@@ -33,17 +33,7 @@ jobs:
           TARGET: "/www/wwwroot"
 
       - name: 将代码部署到服务器
-        env:
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
-          NEXT_PUBLIC_CLERK_SIGN_IN_URL: ${{ secrets.NEXT_PUBLIC_CLERK_SIGN_IN_URL }}
-          NEXT_PUBLIC_CLERK_SIGN_UP_URL: ${{ secrets.NEXT_PUBLIC_CLERK_SIGN_UP_URL }}
-          NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: ${{ secrets.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL }}
-          NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: ${{ secrets.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL }}
-          UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
-          UPLOADTHING_APP_ID: ${{ secrets.UPLOADTHING_APP_ID }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          ssh -o StrictHostKeyChecking=no \
+          ssh \
               root@${{ secrets.REMOTE_HOST }} \
               "cd /www/wwwroot/su-discord && git pull origin master && npm install && pm2 reload ecosystem.config.js --env production"

@@ -6,7 +6,7 @@ module.exports = {
 			args: "start",
 			instances: "max",
 			autorestart: true,
-			watch: false,
+			watch: true,
 			max_memory_restart: "1G",
 			env: {
 				NODE_ENV: "production",
