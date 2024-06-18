@@ -22,12 +22,17 @@ jobs:
         with:
           node-version: 18.20.2
 
-      # 安装依赖
-      - name: 安装依赖
-        run: npm install
+      - name: 上传腾讯云
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "su-discord"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: "root"
+          TARGET: "/www/wwwroot"
 
-      # 打包
-      - name: 打包
+      - name: 将代码部署到服务器
         env:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
@@ -38,14 +43,7 @@ jobs:
           UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
           UPLOADTHING_APP_ID: ${{ secrets.UPLOADTHING_APP_ID }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npm run build
-
-      - name: 上传腾讯云
-        uses: easingthemes/ssh-deploy@main
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          ARGS: "-rlgoDzvc -i --delete"
-          SOURCE: "dist"
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: "root"
-          TARGET: "/www/wwwroot"
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+              root@${{ secrets.REMOTE_HOST }} \
+              "cd /www/wwwroot/su-discord && git pull origin master && npm install && pm2 reload ecosystem.config.js --env production"
