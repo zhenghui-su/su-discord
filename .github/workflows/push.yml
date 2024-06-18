@@ -20,7 +20,7 @@ jobs:
         # 使用action库  actions/setup-node安装node
         uses: actions/setup-node@v2
         with:
-          node-version: 16.20.2
+          node-version: 18.20.2
 
       # 安装依赖
       - name: 安装依赖
