@@ -33,7 +33,7 @@ jobs:
         with:
           SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           ARGS: "-rlgoDzvc -i --delete"
-          SOURCE: "su-discord"
+          SOURCE: "dist"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: "root"
           TARGET: "/www/wwwroot"
@@ -45,5 +45,5 @@ jobs:
           username: root
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            cd /www/wwwroot/su-discord
+            cd /www/wwwroot/dist
             pm2 reload ecosystem.config.js --env production
