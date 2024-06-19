@@ -1,6 +1,6 @@
 ## Introduce
 
-This project uses Nextjs 13, React，Socket.io，Prisma，Zustand，Tailwind，Shadcn-ui，MySQL，Clerk，Zod，Uploadthing
+This project uses Nextjs 13, React，Socket.io，Prisma，Zustand，Tailwind，Shadcn-ui，MySQL，Clerk，Zod，Uploadthing，LiveKit
 
 After the git clone, create an `.env` file and add the following content:
 
@@ -16,6 +16,9 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
 
 UPLOADTHING_SECRET=your-uploadthing-secret
 UPLOADTHING_APP_ID=your-uploadthing-app-id
+
+LIVEKIT_API_KEY=your-livekit-api-key
+LIVEKIT_API_SECRET=your-livekit-api-secret
 
 DATABASE_URL="mysql://your-name:your-password@host-address:port/database"
 ```
