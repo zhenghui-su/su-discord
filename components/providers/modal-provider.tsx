@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { CreateServerModal } from "@/components/modals/create-server-modal"
 import { InviteModal } from "@/components/modals/invite-modal"
 import { EditServerModal } from "@/components/modals/edit-server-modal"
+import { MembersModal } from "@/components/modals/members-modal"
 
 /**
  * 所有对话框的提供者-将所有对话框集中处理水合作用
@@ -33,6 +34,7 @@ export const ModalProvider = () => {
 			<CreateServerModal />
 			<InviteModal />
 			<EditServerModal />
+			<MembersModal />
 		</>
 	)
 }
