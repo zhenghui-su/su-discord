@@ -4,14 +4,20 @@
  * @LastEditors: 苏征辉 343196323@qq.com
  * @Description: 对话框状态 Store
  */
+import { Server } from "@prisma/client"
 import { create } from "zustand"
 
-export type ModalType = "createServer"
+export type ModalType = "createServer" | "invite"
+
+interface ModalData {
+	server?: Server
+}
 
 interface ModalStore {
 	type: ModalType | null
+	data: ModalData
 	isOpen: boolean
-	onOpen: (type: ModalType) => void
+	onOpen: (type: ModalType, data?: ModalData) => void
 	onClose: () => void
 }
 /**
@@ -19,7 +25,8 @@ interface ModalStore {
  */
 export const useModalStore = create<ModalStore>((set) => ({
 	type: null,
+	data: {},
 	isOpen: false,
-	onOpen: (type) => set(() => ({ type, isOpen: true })),
+	onOpen: (type, data = {}) => set(() => ({ type, isOpen: true, data })),
 	onClose: () => set(() => ({ type: null, isOpen: false })),
 }))

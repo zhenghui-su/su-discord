@@ -19,6 +19,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useModalStore } from "@/hooks/use-modal-store"
 
 // 如果不用这个扩展的类型, 只使用Server会发现找不到server.members
 interface ServerHeaderProps {
@@ -26,6 +27,8 @@ interface ServerHeaderProps {
 	role?: MemberRole
 }
 export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
+	const { onOpen } = useModalStore()
+
 	// 是否是管理员
 	const isAdmin = role === MemberRole.ADMIN
 	// 是否是主持人 管理员也同时可以是主持人
@@ -51,6 +54,7 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
 				{/* 邀请成员 */}
 				{isModerator && (
 					<DropdownMenuItem
+						onClick={() => onOpen("invite", { server })}
 						className='text-indigo-600 dark:text-indigo-400
             px-3 py-2 text-sm cursor-pointer'
 					>

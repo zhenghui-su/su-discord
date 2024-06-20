@@ -1,8 +1,8 @@
 "use client"
+import { useEffect, useState } from "react"
 
 import { CreateServerModal } from "@/components/modals/create-server-modal"
-
-import { useEffect, useState } from "react"
+import { InviteModal } from "@/components/modals/invite-modal"
 
 export const ModalProvider = () => {
 	// 防止服务器端渲染与客户端渲染不匹配：
@@ -25,6 +25,7 @@ export const ModalProvider = () => {
 	return (
 		<>
 			<CreateServerModal />
+			<InviteModal />
 		</>
 	)
 }
