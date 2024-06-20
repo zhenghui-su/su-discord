@@ -3,7 +3,13 @@ import { useEffect, useState } from "react"
 
 import { CreateServerModal } from "@/components/modals/create-server-modal"
 import { InviteModal } from "@/components/modals/invite-modal"
+import { EditServerModal } from "@/components/modals/edit-server-modal"
 
+/**
+ * 所有对话框的提供者-将所有对话框集中处理水合作用
+ *
+ * @returns
+ */
 export const ModalProvider = () => {
 	// 防止服务器端渲染与客户端渲染不匹配：
 	// 在使用服务器端渲染（SSR）或静态生成（SSG）时，组件在服务器上渲染的 HTML 会直接发送到客户端。客户端接收到 HTML 后，React 会在现有的 DOM 上进行水合作用。
@@ -26,6 +32,7 @@ export const ModalProvider = () => {
 		<>
 			<CreateServerModal />
 			<InviteModal />
+			<EditServerModal />
 		</>
 	)
 }
