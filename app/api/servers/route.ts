@@ -5,6 +5,12 @@ import { db } from "@/lib/db"
 import { NextResponse } from "next/server"
 import { MemberRole } from "@prisma/client"
 
+/**
+ *	用于创建服务器的API
+ *
+ * @param req 传入图像地址和服务器名称
+ * @returns 返回server的json数据
+ */
 export async function POST(req: Request) {
 	try {
 		const { name, imageUrl } = await req.json()
