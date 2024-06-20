@@ -7,7 +7,20 @@
 import { Server } from "@prisma/client"
 import { create } from "zustand"
 
-export type ModalType = "createServer" | "invite" | "editServer" | "members"
+/**
+ * 对话框类型
+ * - createServer 创建服务器
+ * - invite 邀请成员
+ * - editServer 编辑服务器
+ * - members 成员管理
+ * - createChannel 创建频道
+ */
+export type ModalType =
+	| "createServer"
+	| "invite"
+	| "editServer"
+	| "members"
+	| "createChannel"
 
 interface ModalData {
 	server?: Server
