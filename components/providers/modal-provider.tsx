@@ -6,6 +6,7 @@ import { InviteModal } from "@/components/modals/invite-modal"
 import { EditServerModal } from "@/components/modals/edit-server-modal"
 import { MembersModal } from "@/components/modals/members-modal"
 import { CreateChannelModal } from "@/components/modals/create-channel-modal"
+import { LeaveServerModal } from "@/components/modals/leave-server-modal"
 
 /**
  * 所有对话框的提供者-将所有对话框集中处理水合作用
@@ -37,6 +38,7 @@ export const ModalProvider = () => {
 			<EditServerModal />
 			<MembersModal />
 			<CreateChannelModal />
+			<LeaveServerModal />
 		</>
 	)
 }
