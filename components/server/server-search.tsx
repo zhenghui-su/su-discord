@@ -88,12 +88,12 @@ export const ServerSearch = ({ data }: ServerSearchProps) => {
 				</p>
 				{/* 搜索快捷提示角标 */}
 				<kbd
-					className=' pointer-events-none inline-flexh-5 select-none
+					className='pointer-events-none inline-flexh-5 select-none
           items-center gap-1 rounded border bg-muted px-1.5 font-mono
           text-[10px] font-medium text-muted-foreground ml-auto'
 				>
 					{/* 根据用户操作系统显示对应操作 */}
-					<span className='text-xs'>{os === "Mac" ? "⌘" : "CTRL"} K</span>
+					<span className='text-xs'>{os === "Mac" ? "⌘" : "CTRL"} + K</span>
 				</kbd>
 			</button>
 			{/* 搜索对话框 */}
