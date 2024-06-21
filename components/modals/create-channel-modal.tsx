@@ -33,6 +33,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
+import { useEffect } from "react"
 
 const formSchema = z.object({
 	name: z
@@ -48,19 +49,30 @@ const formSchema = z.object({
  * @returns 创建聊天频道对话框
  */
 export const CreateChannelModal = () => {
-	const { isOpen, onClose, type } = useModalStore()
+	const { isOpen, onClose, type, data } = useModalStore()
 	const router = useRouter()
 	const params = useParams()
 
 	const isModalOpen = isOpen && type === "createChannel"
+	// 如果是从频道列表头部+号打开的, 那么需要获取频道类型
+	const { channelType } = data
 
 	const form = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
-			type: ChannelType.TEXT,
+			type: channelType || ChannelType.TEXT,
 		},
 	})
+
+	useEffect(() => {
+		// 如果从频道列表头部需要添加频道,根据所属频道列表类型设置Select的初始值
+		if (channelType) {
+			form.setValue("type", channelType)
+		} else {
+			form.setValue("type", ChannelType.TEXT)
+		}
+	}, [channelType, form])
 
 	const isLoading = form.formState.isSubmitting
 
