@@ -3,11 +3,15 @@ import { ChannelType, MemberRole } from "@prisma/client"
 import { redirect } from "next/navigation"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
 import { currentProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db"
 
 import { ServerHeader } from "./server-header"
 import { ServerSearch } from "./server-search"
+import { ServerSection } from "./server-section"
+import { ServerChannel } from "./server-channel"
+import { ServerMember } from "./server-member"
 
 interface ServerSidebarProps {
 	serverId: string
@@ -151,6 +155,93 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
 						]}
 					/>
 				</div>
+				{/* 分割线 */}
+				<Separator className='bg-zinc-200 dark:bg-zinc-700 rounded-md my-2' />
+				{/* 服务器侧边栏-文本频道列表栏 */}
+				{!!textChannels?.length && (
+					<div className='mb-2'>
+						{/* 只有版主和管理员会显示图标 */}
+						<ServerSection
+							label='Text Channels'
+							role={role}
+							sectionType='channels'
+							channelType={ChannelType.TEXT}
+						/>
+						<div className='space-y-[2px]'>
+							{/* 普通成员显示频道列表 */}
+							{textChannels.map((channel) => (
+								<ServerChannel
+									key={channel.id}
+									channel={channel}
+									server={server}
+									role={role}
+								/>
+							))}
+						</div>
+					</div>
+				)}
+				{/* 服务器侧边栏-语音频道列表栏 */}
+				{!!audioChannels?.length && (
+					<div className='mb-2'>
+						{/* 只有版主和管理员会显示图标 */}
+						<ServerSection
+							label='Voice Channels'
+							role={role}
+							sectionType='channels'
+							channelType={ChannelType.AUDIO}
+						/>
+						<div className='space-y-[2px]'>
+							{/* 普通成员显示频道列表 */}
+							{audioChannels.map((channel) => (
+								<ServerChannel
+									key={channel.id}
+									channel={channel}
+									server={server}
+									role={role}
+								/>
+							))}
+						</div>
+					</div>
+				)}
+				{/* 服务器侧边栏-视频频道列表栏 */}
+				{!!videoChannels?.length && (
+					<div className='mb-2'>
+						{/* 只有版主和管理员会显示图标 */}
+						<ServerSection
+							label='Video Channels'
+							role={role}
+							sectionType='channels'
+							channelType={ChannelType.VIDEO}
+						/>
+						<div className='space-y-[2px]'>
+							{/* 普通成员显示频道列表 */}
+							{videoChannels.map((channel) => (
+								<ServerChannel
+									key={channel.id}
+									channel={channel}
+									server={server}
+									role={role}
+								/>
+							))}
+						</div>
+					</div>
+				)}
+				{/* 服务器侧边栏-服务器成员列表栏 */}
+				{!!members?.length && (
+					<div className='mb-2'>
+						{/* 只有版主和管理员会显示图标 */}
+						<ServerSection
+							label='Members'
+							role={role}
+							sectionType='members'
+							server={server}
+						/>
+						{/* 普通成员显示频道列表 */}
+						{members.map((member) => (
+							<ServerMember key={member.id} member={member} server={server} />
+						))}
+					</div>
+				)}
 			</ScrollArea>
 		</div>
 	)
