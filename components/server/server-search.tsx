@@ -30,6 +30,9 @@ interface ServerSearchProps {
 		  }[]
 }
 
+/**
+ * ServerSearch 搜索栏组件
+ */
 export const ServerSearch = ({ data }: ServerSearchProps) => {
 	const os = useOS()
 	const [open, setOpen] = useState(false)
