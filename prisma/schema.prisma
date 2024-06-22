@@ -56,6 +56,13 @@ model Member {
   serverId String
   server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
+  messages        Message[]
+  direactMessages DirectMessage[]
+
+  // 成员聊天之间关联
+  conversationsInitiated Conversation[] @relation("MemberOne")
+  conversationsReceived  Conversation[] @relation("MemberTwo")
+
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -80,9 +87,70 @@ model Channel {
   serverId String
   server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
+  messages Message[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([profileId])
   @@index([serverId])
+}
+
+// 聊天消息表-频道聊天所用
+model Message {
+  id      String @id @default(uuid())
+  content String @db.Text
+
+  fileUrl String? @db.Text
+
+  memberId String
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  channelId String
+  channel   Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memberId])
+  @@index([channelId])
+}
+
+// 成员聊天表
+model Conversation {
+  id String @id @default(uuid())
+
+  memberOneId String
+  memberOne   Member @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+
+  memberTwoId String
+  memberTwo   Member @relation("MemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
+
+  directMessages DirectMessage[]
+
+  @@unique([memberOneId, memberTwoId])
+  @@index([memberTwoId])
+}
+
+// 直接聊天表-用于成员之间聊天
+model DirectMessage {
+  id      String  @id @default(uuid())
+  content String  @db.Text
+  fileUrl String? @db.Text
+
+  memberId String
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memberId])
+  @@index([conversationId])
 }
