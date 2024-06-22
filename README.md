@@ -1,6 +1,6 @@
 ## Introduce
 
-This project uses Nextjs 13, React，Socket.io，Prisma，Zustand，Tailwind，Shadcn-ui，MySQL，Clerk，Zod，Uploadthing，LiveKit
+This project uses Nextjs 13, React，Socket.io，Prisma，Zustand，Tailwind，Shadcn-ui，MySQL，Clerk，Zod，ReactQuery，Uploadthing，LiveKit
 
 After the git clone, create an `.env` file and add the following content:
 
