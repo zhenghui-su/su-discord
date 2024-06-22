@@ -46,7 +46,7 @@ const MemberIdPage = async ({ params }: MemberIdPageProps) => {
 	 * 创建或找到对应的聊天对话
 	 */
 	const conversation = await getOrCreateConversation(
-		currentMember.profileId,
+		currentMember.id,
 		params.memberId
 	)
 
