@@ -8,6 +8,8 @@ import { MembersModal } from "@/components/modals/members-modal"
 import { CreateChannelModal } from "@/components/modals/create-channel-modal"
 import { LeaveServerModal } from "@/components/modals/leave-server-modal"
 import { DeleteServerModal } from "@/components/modals/delete-server-modal"
+import { DeleteChannelModal } from "@/components/modals/delete-channel-modal"
+import { EditChannelModal } from "@/components/modals/edit-channel-modal"
 
 /**
  * 所有对话框的提供者-将所有对话框集中处理水合作用
@@ -41,6 +43,8 @@ export const ModalProvider = () => {
 			<CreateChannelModal />
 			<LeaveServerModal />
 			<DeleteServerModal />
+			<DeleteChannelModal />
+			<EditChannelModal />
 		</>
 	)
 }
