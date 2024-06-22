@@ -9,11 +9,12 @@ datasource db {
 }
 
 model Profile {
-  id       String    @id @default(uuid())
-  userId   String    @unique
+  id       String @id @default(uuid())
+  userId   String @unique
   name     String
-  imageUrl String    @db.Text
-  email    String    @db.Text
+  imageUrl String @db.Text
+  email    String @db.Text
+
   servers  Server[]
   members  Member[]
   channels Channel[]
@@ -56,14 +57,13 @@ model Member {
   serverId String
   server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
-  messages        Message[]
-  direactMessages DirectMessage[]
+  messages       Message[]
+  directMessages DirectMessage[]
 
-  // 成员聊天之间关联
   conversationsInitiated Conversation[] @relation("MemberOne")
   conversationsReceived  Conversation[] @relation("MemberTwo")
 
-  createAt  DateTime @default(now())
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([profileId])
@@ -114,11 +114,10 @@ model Message {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([memberId])
   @@index([channelId])
+  @@index([memberId])
 }
 
-// 成员聊天表
 model Conversation {
   id String @id @default(uuid())
 
@@ -134,7 +133,6 @@ model Conversation {
   @@index([memberTwoId])
 }
 
-// 直接聊天表-用于成员之间聊天
 model DirectMessage {
   id      String  @id @default(uuid())
   content String  @db.Text
