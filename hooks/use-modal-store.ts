@@ -4,7 +4,7 @@
  * @LastEditors: 苏征辉 343196323@qq.com
  * @Description: 对话框状态 Store
  */
-import { ChannelType, Server } from "@prisma/client"
+import { Channel, ChannelType, Server } from "@prisma/client"
 import { create } from "zustand"
 
 /**
@@ -23,9 +23,12 @@ export type ModalType =
 	| "createChannel"
 	| "leaveServer"
 	| "deleteServer"
+	| "deleteChannel"
+	| "editChannel"
 
 interface ModalData {
-	server?: Server;
+	server?: Server
+	channel?: Channel
 	channelType?: ChannelType
 }
 
