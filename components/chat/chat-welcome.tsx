@@ -5,7 +5,7 @@ interface ChatWelcomeProps {
 	type: "channel" | "conversation"
 }
 /**
- *  用于新创建的聊天,显示欢迎内容
+ *  用于显示频道或成员聊天欢迎内容
  *
  * @param param0 传入名称和类型
  * @returns 返回欢迎内容
