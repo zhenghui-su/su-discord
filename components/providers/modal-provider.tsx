@@ -11,6 +11,7 @@ import { DeleteServerModal } from "@/components/modals/delete-server-modal"
 import { DeleteChannelModal } from "@/components/modals/delete-channel-modal"
 import { EditChannelModal } from "@/components/modals/edit-channel-modal"
 import { MessageFileModal } from "@/components/modals/message-file-modal"
+import { DeleteMessageModal } from "@/components/modals/delete-message-modal"
 
 /**
  * 所有对话框的提供者-将所有对话框集中处理水合作用
@@ -47,6 +48,7 @@ export const ModalProvider = () => {
 			<DeleteChannelModal />
 			<EditChannelModal />
 			<MessageFileModal />
+			<DeleteMessageModal />
 		</>
 	)
 }
