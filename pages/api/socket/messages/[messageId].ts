@@ -148,7 +148,7 @@ export default async function handler(
 			})
 		}
 
-		const updateKey = `chat:${channelId}:message:update`
+		const updateKey = `chat:${channelId}:messages:update`
 
 		// 通知socket服务器
 		res?.socket?.server?.io?.emit(updateKey, message)
