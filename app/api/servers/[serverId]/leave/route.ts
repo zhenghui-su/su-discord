@@ -23,17 +23,15 @@ export async function PATCH(
 		}
 
 		if (!params.serverId) {
-			return new NextResponse("Server ID Missing", { status: 400 })
+			return new NextResponse("Server ID missing", { status: 400 })
 		}
 
 		const server = await db.server.update({
 			where: {
-				// 找对应服务器,但当前个人资料的id不能和服务器管理员的id一致
 				id: params.serverId,
 				profileId: {
 					not: profile.id,
 				},
-				// 这是用于离开服务器的接口,当前个人资料的id必须是服务器里面的成员
 				members: {
 					some: {
 						profileId: profile.id,
@@ -41,7 +39,6 @@ export async function PATCH(
 				},
 			},
 			data: {
-				// 找到对应的服务器后, 在成员中删除当前个人资料的成员
 				members: {
 					deleteMany: {
 						profileId: profile.id,

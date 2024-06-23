@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
+import { MemberRole } from "@prisma/client"
 
 import { currentProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db"
-import { MemberRole } from "@prisma/client"
 
 /**
  * 用于创建服务器中频道的API

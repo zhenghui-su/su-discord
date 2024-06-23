@@ -18,29 +18,20 @@ const MESSAGES_BATCH = 10
  */
 export async function GET(req: Request): Promise<NextResponse> {
 	try {
-		// 获取当前用户的 profile
 		const profile = await currentProfile()
 		const { searchParams } = new URL(req.url)
-		/**
-		 * 当前处于的消息游标
-		 */
+
 		const cursor = searchParams.get("cursor")
 		const channelId = searchParams.get("channelId")
 
-		// 如果用户未授权，返回 401 错误
 		if (!profile) {
 			return new NextResponse("Unauthorized", { status: 401 })
 		}
 
-		// 如果缺少 channelId，返回 400 错误
 		if (!channelId) {
 			return new NextResponse("Channel ID missing", { status: 400 })
 		}
 
-		/**
-		 * 消息列表
-		 * @type {Message[]}
-		 */
 		let messages: Message[] = []
 
 		// 如果存在游标，进行分页查询
@@ -100,7 +91,6 @@ export async function GET(req: Request): Promise<NextResponse> {
 			nextCursor,
 		})
 	} catch (error) {
-		// 打印错误并返回 500 错误
 		console.log("[MESSAGES_GET]", error)
 		return new NextResponse("Internal Error", { status: 500 })
 	}

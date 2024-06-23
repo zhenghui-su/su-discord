@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
+import { MemberRole } from "@prisma/client"
 
 import { currentProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db"
-import { MemberRole } from "@prisma/client"
 
 /**
  *  用于删除服务器中的频道的API
@@ -20,7 +20,6 @@ export async function DELETE(
 		const { searchParams } = new URL(req.url)
 
 		const serverId = searchParams.get("serverId")
-		const channelId = params.channelId
 
 		if (!profile) {
 			return new NextResponse("Unauthorized", { status: 401 })
@@ -30,13 +29,11 @@ export async function DELETE(
 			return new NextResponse("Server ID missing", { status: 400 })
 		}
 
-		if (!channelId) {
+		if (!params.channelId) {
 			return new NextResponse("Channel ID missing", { status: 400 })
 		}
 
 		const server = await db.server.update({
-			// 找到对应的服务器同时只有
-			// 管理员和版主可以删除频道
 			where: {
 				id: serverId,
 				members: {
@@ -48,11 +45,10 @@ export async function DELETE(
 					},
 				},
 			},
-			// 删除频道, 并且频道不能是初始化的general
 			data: {
 				channels: {
 					delete: {
-						id: channelId,
+						id: params.channelId,
 						name: {
 							not: "general",
 						},
@@ -68,13 +64,6 @@ export async function DELETE(
 	}
 }
 
-/**
- *  用于编辑服务器中的频道的API
- *
- * @param req 传入频道名字和类型,服务器id
- * @param param1 传入频道id
- * @returns
- */
 export async function PATCH(
 	req: Request,
 	{ params }: { params: { channelId: string } }
@@ -85,7 +74,6 @@ export async function PATCH(
 		const { searchParams } = new URL(req.url)
 
 		const serverId = searchParams.get("serverId")
-		const channelId = params.channelId
 
 		if (!profile) {
 			return new NextResponse("Unauthorized", { status: 401 })
@@ -95,7 +83,7 @@ export async function PATCH(
 			return new NextResponse("Server ID missing", { status: 400 })
 		}
 
-		if (!channelId) {
+		if (!params.channelId) {
 			return new NextResponse("Channel ID missing", { status: 400 })
 		}
 
@@ -122,7 +110,7 @@ export async function PATCH(
 				channels: {
 					update: {
 						where: {
-							id: channelId,
+							id: params.channelId,
 							NOT: {
 								name: "general",
 							},
