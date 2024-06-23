@@ -237,9 +237,11 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
 							server={server}
 						/>
 						{/* 普通成员显示频道列表 */}
-						{members.map((member) => (
-							<ServerMember key={member.id} member={member} server={server} />
-						))}
+						<div className='space-y-[2px]'>
+							{members.map((member) => (
+								<ServerMember key={member.id} member={member} server={server} />
+							))}
+						</div>
 					</div>
 				)}
 			</ScrollArea>
