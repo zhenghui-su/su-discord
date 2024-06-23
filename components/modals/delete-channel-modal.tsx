@@ -16,7 +16,6 @@ import {
 
 import { useModalStore } from "@/hooks/use-modal-store"
 import { Button } from "@/components/ui/button"
-import { url } from "inspector"
 
 /**
  *	用于管理员和版主删除频道的对话框
