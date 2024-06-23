@@ -84,7 +84,7 @@ export const ServerSearch = ({ data }: ServerSearchProps) => {
           text-zinc-500 dark:text-zinc-400
           group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition'
 				>
-					Serach
+					Search
 				</p>
 				{/* 搜索快捷提示角标 */}
 				<kbd
