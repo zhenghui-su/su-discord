@@ -1,20 +1,6 @@
-/*
- * @Author: 苏征辉 343196323@qq.com
- * @Date: 2024-06-17 22:18:51
- * @LastEditors: 苏征辉 343196323@qq.com
- * @Description: 对话框状态 Store
- */
 import { Channel, ChannelType, Server } from "@prisma/client"
 import { create } from "zustand"
 
-/**
- * 对话框类型
- * - createServer 创建服务器
- * - invite 邀请成员
- * - editServer 编辑服务器
- * - members 成员管理
- * - createChannel 创建频道
- */
 export type ModalType =
 	| "createServer"
 	| "invite"
@@ -46,10 +32,10 @@ interface ModalStore {
 /**
  * 对话框状态 Store
  */
-export const useModalStore = create<ModalStore>((set) => ({
+export const useModal = create<ModalStore>((set) => ({
 	type: null,
 	data: {},
 	isOpen: false,
-	onOpen: (type, data = {}) => set(() => ({ type, isOpen: true, data })),
-	onClose: () => set(() => ({ type: null, isOpen: false })),
+	onOpen: (type, data = {}) => set({ isOpen: true, type, data }),
+	onClose: () => set({ type: null, isOpen: false }),
 }))

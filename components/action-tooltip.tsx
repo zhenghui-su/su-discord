@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/tooltip"
 
 interface ActionTooltipProps {
-	children: React.ReactNode
 	label: string
+	children: React.ReactNode
 	side?: "top" | "right" | "bottom" | "left"
 	align?: "start" | "center" | "end"
 }
@@ -20,8 +20,8 @@ interface ActionTooltipProps {
  * @returns 鼠标悬浮提示组件
  */
 export const ActionTooltip = ({
-	children,
 	label,
+	children,
 	side,
 	align,
 }: ActionTooltipProps) => {

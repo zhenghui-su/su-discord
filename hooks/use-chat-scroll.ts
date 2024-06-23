@@ -81,7 +81,7 @@ export const useChatScroll = ({
 		// 如果需要自动滚动，滚动到最新消息-即最底部
 		if (shouldAutoScroll()) {
 			setTimeout(() => {
-				bottomRef?.current?.scrollIntoView({
+				bottomRef.current?.scrollIntoView({
 					behavior: "smooth",
 				})
 			}, 100)
