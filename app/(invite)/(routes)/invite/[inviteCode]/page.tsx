@@ -1,7 +1,8 @@
-import { currentProfile } from "@/lib/current-profile"
-import { db } from "@/lib/db"
-import { auth } from "@clerk/nextjs/server"
+import { redirectToSignIn } from "@clerk/nextjs"
 import { redirect } from "next/navigation"
+
+import { db } from "@/lib/db"
+import { currentProfile } from "@/lib/current-profile"
 
 interface InviteCodePageProps {
 	params: {
@@ -19,15 +20,13 @@ const InviteCodePage = async ({ params }: InviteCodePageProps) => {
 	const profile = await currentProfile()
 
 	if (!profile) {
-		return auth().redirectToSignIn()
+		return redirectToSignIn()
 	}
 
 	if (!params.inviteCode) {
 		return redirect("/")
 	}
-	/**
-	 * 先找出是否已经加入过该服务器
-	 */
+
 	const existingServer = await db.server.findFirst({
 		where: {
 			inviteCode: params.inviteCode,
@@ -38,13 +37,11 @@ const InviteCodePage = async ({ params }: InviteCodePageProps) => {
 			},
 		},
 	})
-	// 如果已经加入过该服务器，则直接跳转到该服务器
+
 	if (existingServer) {
 		return redirect(`/servers/${existingServer.id}`)
 	}
-	/**
-	 * 如果没有加入过该服务器，则更新服务器信息，添加该成员
-	 */
+
 	const server = await db.server.update({
 		where: {
 			inviteCode: params.inviteCode,
@@ -64,11 +61,7 @@ const InviteCodePage = async ({ params }: InviteCodePageProps) => {
 		return redirect(`/servers/${server.id}`)
 	}
 
-	return (
-		<div>
-			<p>Hello Invite</p>
-		</div>
-	)
+	return null
 }
 
 export default InviteCodePage
