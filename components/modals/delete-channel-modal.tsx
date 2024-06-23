@@ -13,8 +13,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog"
-
-import { useModalStore } from "@/hooks/use-modal-store"
+import { useModal } from "@/hooks/use-modal-store"
 import { Button } from "@/components/ui/button"
 
 /**
@@ -23,14 +22,10 @@ import { Button } from "@/components/ui/button"
  * @returns 删除频道对话框
  */
 export const DeleteChannelModal = () => {
-	const { isOpen, onClose, type, data } = useModalStore()
+	const { isOpen, onClose, type, data } = useModal()
 	const router = useRouter()
 
-	/**
-	 * 对话框是否打开
-	 */
 	const isModalOpen = isOpen && type === "deleteChannel"
-	// 当前的服务器和频道
 	const { server, channel } = data
 
 	const [isLoading, setIsLoading] = useState(false)
@@ -38,7 +33,6 @@ export const DeleteChannelModal = () => {
 	const onClick = async () => {
 		try {
 			setIsLoading(true)
-
 			const url = qs.stringifyUrl({
 				url: `/api/channels/${channel?.id}`,
 				query: {
@@ -52,7 +46,7 @@ export const DeleteChannelModal = () => {
 			router.refresh()
 			router.push(`/servers/${server?.id}`)
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 		} finally {
 			setIsLoading(false)
 		}
@@ -66,7 +60,7 @@ export const DeleteChannelModal = () => {
 						Delete Channel
 					</DialogTitle>
 					<DialogDescription className='text-center text-zinc-500'>
-						Are you sure you want to do this ? <br />
+						Are you sure you want to do this? <br />
 						<span className='text-indigo-500 font-semibold'>
 							#{channel?.name}
 						</span>{" "}
@@ -78,7 +72,7 @@ export const DeleteChannelModal = () => {
 						<Button disabled={isLoading} onClick={onClose} variant='ghost'>
 							Cancel
 						</Button>
-						<Button disabled={isLoading} onClick={onClick} variant='primary'>
+						<Button disabled={isLoading} variant='primary' onClick={onClick}>
 							Confirm
 						</Button>
 					</div>

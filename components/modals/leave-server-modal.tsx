@@ -12,8 +12,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog"
-
-import { useModalStore } from "@/hooks/use-modal-store"
+import { useModal } from "@/hooks/use-modal-store"
 import { Button } from "@/components/ui/button"
 
 /**
@@ -21,14 +20,10 @@ import { Button } from "@/components/ui/button"
  * @returns 离开服务器对话框
  */
 export const LeaveServerModal = () => {
-	const { isOpen, onClose, type, data } = useModalStore()
+	const { isOpen, onClose, type, data } = useModal()
 	const router = useRouter()
 
-	/**
-	 * 对话框是否打开
-	 */
 	const isModalOpen = isOpen && type === "leaveServer"
-	// 当前服务的数据
 	const { server } = data
 
 	const [isLoading, setIsLoading] = useState(false)
@@ -43,7 +38,7 @@ export const LeaveServerModal = () => {
 			router.refresh()
 			router.push("/")
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 		} finally {
 			setIsLoading(false)
 		}
@@ -69,7 +64,7 @@ export const LeaveServerModal = () => {
 						<Button disabled={isLoading} onClick={onClose} variant='ghost'>
 							Cancel
 						</Button>
-						<Button disabled={isLoading} onClick={onClick} variant='primary'>
+						<Button disabled={isLoading} variant='primary' onClick={onClick}>
 							Confirm
 						</Button>
 					</div>

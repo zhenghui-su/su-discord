@@ -12,8 +12,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog"
-
-import { useModalStore } from "@/hooks/use-modal-store"
+import { useModal } from "@/hooks/use-modal-store"
 import { Button } from "@/components/ui/button"
 
 /**
@@ -22,14 +21,10 @@ import { Button } from "@/components/ui/button"
  * @returns 删除服务器对话框
  */
 export const DeleteServerModal = () => {
-	const { isOpen, onClose, type, data } = useModalStore()
+	const { isOpen, onClose, type, data } = useModal()
 	const router = useRouter()
 
-	/**
-	 * 对话框是否打开
-	 */
 	const isModalOpen = isOpen && type === "deleteServer"
-	// 当前服务的数据
 	const { server } = data
 
 	const [isLoading, setIsLoading] = useState(false)
@@ -44,7 +39,7 @@ export const DeleteServerModal = () => {
 			router.refresh()
 			router.push("/")
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 		} finally {
 			setIsLoading(false)
 		}
@@ -58,7 +53,7 @@ export const DeleteServerModal = () => {
 						Delete Server
 					</DialogTitle>
 					<DialogDescription className='text-center text-zinc-500'>
-						Are you sure you want to do this ? <br />
+						Are you sure you want to do this? <br />
 						<span className='text-indigo-500 font-semibold'>
 							{server?.name}
 						</span>{" "}
@@ -70,7 +65,7 @@ export const DeleteServerModal = () => {
 						<Button disabled={isLoading} onClick={onClose} variant='ghost'>
 							Cancel
 						</Button>
-						<Button disabled={isLoading} onClick={onClick} variant='primary'>
+						<Button disabled={isLoading} variant='primary' onClick={onClick}>
 							Confirm
 						</Button>
 					</div>

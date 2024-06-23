@@ -1,4 +1,5 @@
 "use client"
+
 import axios from "axios"
 import qs from "query-string"
 import * as z from "zod"
@@ -15,12 +16,14 @@ import {
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import FileUpload from "@/components/file-upload"
+import { FileUpload } from "@/components/file-upload"
 import { useRouter } from "next/navigation"
-import { useModalStore } from "@/hooks/use-modal-store"
+import { useModal } from "@/hooks/use-modal-store"
 
 const formSchema = z.object({
-	fileUrl: z.string().min(1, { message: "Attachment is required." }),
+	fileUrl: z.string().min(1, {
+		message: "Attachment is required.",
+	}),
 })
 /**
  *	用于发送消息中-发送图片/文件选择上传的对话框
@@ -28,7 +31,7 @@ const formSchema = z.object({
  * @returns 发送图片/文件选择上传的对话框
  */
 export const MessageFileModal = () => {
-	const { isOpen, onClose, type, data } = useModalStore()
+	const { isOpen, onClose, type, data } = useModal()
 	const router = useRouter()
 
 	const isModalOpen = isOpen && type === "messageFile"
@@ -101,7 +104,7 @@ export const MessageFileModal = () => {
 							</div>
 						</div>
 						<DialogFooter className='bg-gray-100 px-6 py-4'>
-							<Button disabled={isLoading} variant='primary'>
+							<Button variant='primary' disabled={isLoading}>
 								Send
 							</Button>
 						</DialogFooter>

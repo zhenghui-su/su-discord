@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useParams, useRouter } from "next/navigation"
-import { useModalStore } from "@/hooks/use-modal-store"
+import { useModal } from "@/hooks/use-modal-store"
 import {
 	Select,
 	SelectContent,
@@ -38,7 +38,9 @@ import { useEffect } from "react"
 const formSchema = z.object({
 	name: z
 		.string()
-		.min(1, { message: "Channel name is required." })
+		.min(1, {
+			message: "Channel name is required.",
+		})
 		.refine((name) => name !== "general", {
 			message: "Channel name cannot be 'general'",
 		}),
@@ -49,12 +51,11 @@ const formSchema = z.object({
  * @returns 创建聊天频道对话框
  */
 export const CreateChannelModal = () => {
-	const { isOpen, onClose, type, data } = useModalStore()
+	const { isOpen, onClose, type, data } = useModal()
 	const router = useRouter()
 	const params = useParams()
 
 	const isModalOpen = isOpen && type === "createChannel"
-	// 如果是从频道列表头部+号打开的, 那么需要获取频道类型
 	const { channelType } = data
 
 	const form = useForm({
@@ -66,7 +67,6 @@ export const CreateChannelModal = () => {
 	})
 
 	useEffect(() => {
-		// 如果从频道列表头部需要添加频道,根据所属频道列表类型设置Select的初始值
 		if (channelType) {
 			form.setValue("type", channelType)
 		} else {
@@ -84,7 +84,6 @@ export const CreateChannelModal = () => {
 					serverId: params?.serverId,
 				},
 			})
-
 			await axios.post(url, values)
 
 			form.reset()
@@ -122,9 +121,7 @@ export const CreateChannelModal = () => {
 										<FormControl>
 											<Input
 												disabled={isLoading}
-												className='bg-zinc-300/50 border-0
-                        focus-visible:ring-0 text-black
-                        focus-visible:ring-offset-0'
+												className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
 												placeholder='Enter channel name'
 												{...field}
 											/>
@@ -142,14 +139,10 @@ export const CreateChannelModal = () => {
 										<Select
 											disabled={isLoading}
 											onValueChange={field.onChange}
-											value={field.value}
+											defaultValue={field.value}
 										>
 											<FormControl>
-												<SelectTrigger
-													className='bg-zinc-300/50 border-0
-                        focus:ring-0 text-black ring-offset-0
-                        focus:ring-offset-0 capitalize'
-												>
+												<SelectTrigger className='bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none'>
 													<SelectValue placeholder='Select a channel type' />
 												</SelectTrigger>
 											</FormControl>
@@ -171,7 +164,7 @@ export const CreateChannelModal = () => {
 							/>
 						</div>
 						<DialogFooter className='bg-gray-100 px-6 py-4'>
-							<Button disabled={isLoading} variant='primary'>
+							<Button variant='primary' disabled={isLoading}>
 								Create
 							</Button>
 						</DialogFooter>

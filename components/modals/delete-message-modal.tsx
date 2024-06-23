@@ -12,8 +12,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog"
-
-import { useModalStore } from "@/hooks/use-modal-store"
+import { useModal } from "@/hooks/use-modal-store"
 import { Button } from "@/components/ui/button"
 
 /**
@@ -22,13 +21,9 @@ import { Button } from "@/components/ui/button"
  * @returns 删除聊天消息对话框
  */
 export const DeleteMessageModal = () => {
-	const { isOpen, onClose, type, data } = useModalStore()
+	const { isOpen, onClose, type, data } = useModal()
 
-	/**
-	 * 对话框是否打开
-	 */
 	const isModalOpen = isOpen && type === "deleteMessage"
-
 	const { apiUrl, query } = data
 
 	const [isLoading, setIsLoading] = useState(false)
@@ -36,7 +31,6 @@ export const DeleteMessageModal = () => {
 	const onClick = async () => {
 		try {
 			setIsLoading(true)
-
 			const url = qs.stringifyUrl({
 				url: apiUrl || "",
 				query,
@@ -46,7 +40,7 @@ export const DeleteMessageModal = () => {
 
 			onClose()
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 		} finally {
 			setIsLoading(false)
 		}
@@ -60,7 +54,7 @@ export const DeleteMessageModal = () => {
 						Delete Message
 					</DialogTitle>
 					<DialogDescription className='text-center text-zinc-500'>
-						Are you sure you want to do this ? <br />
+						Are you sure you want to do this? <br />
 						The message will be permanently deleted.
 					</DialogDescription>
 				</DialogHeader>
@@ -69,7 +63,7 @@ export const DeleteMessageModal = () => {
 						<Button disabled={isLoading} onClick={onClose} variant='ghost'>
 							Cancel
 						</Button>
-						<Button disabled={isLoading} onClick={onClick} variant='primary'>
+						<Button disabled={isLoading} variant='primary' onClick={onClick}>
 							Confirm
 						</Button>
 					</div>

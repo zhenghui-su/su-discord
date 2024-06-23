@@ -1,4 +1,5 @@
 "use client"
+
 import axios from "axios"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -23,20 +24,24 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import FileUpload from "@/components/file-upload"
+import { FileUpload } from "@/components/file-upload"
 import { useRouter } from "next/navigation"
-import { useModalStore } from "@/hooks/use-modal-store"
+import { useModal } from "@/hooks/use-modal-store"
 
 const formSchema = z.object({
-	name: z.string().min(1, { message: "Server name is required." }),
-	imageUrl: z.string().min(1, { message: "Server image is required." }),
+	name: z.string().min(1, {
+		message: "Server name is required.",
+	}),
+	imageUrl: z.string().min(1, {
+		message: "Server image is required.",
+	}),
 })
 /**
  *	更新服务器对话框
  * @returns
  */
 export const EditServerModal = () => {
-	const { isOpen, onClose, type, data } = useModalStore()
+	const { isOpen, onClose, type, data } = useModal()
 	const router = useRouter()
 
 	const isModalOpen = isOpen && type === "editServer"
@@ -58,13 +63,11 @@ export const EditServerModal = () => {
 	}, [server, form])
 
 	const isLoading = form.formState.isSubmitting
-	/**
-	 *
-	 * @param values 更新服务器的表单数据
-	 */
+
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
 			await axios.patch(`/api/servers/${server?.id}`, values)
+
 			form.reset()
 			router.refresh()
 			onClose()
@@ -72,9 +75,7 @@ export const EditServerModal = () => {
 			console.log(error)
 		}
 	}
-	/**
-	 * 关闭对话框
-	 */
+
 	const handleClose = () => {
 		form.reset()
 		onClose()
@@ -112,6 +113,7 @@ export const EditServerModal = () => {
 									)}
 								/>
 							</div>
+
 							<FormField
 								control={form.control}
 								name='name'
@@ -123,9 +125,7 @@ export const EditServerModal = () => {
 										<FormControl>
 											<Input
 												disabled={isLoading}
-												className='bg-zinc-300/50 border-0
-                        focus-visible:ring-0 text-black
-                        focus-visible:ring-offset-0'
+												className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
 												placeholder='Enter server name'
 												{...field}
 											/>
@@ -136,7 +136,7 @@ export const EditServerModal = () => {
 							/>
 						</div>
 						<DialogFooter className='bg-gray-100 px-6 py-4'>
-							<Button disabled={isLoading} variant='primary'>
+							<Button variant='primary' disabled={isLoading}>
 								Save
 							</Button>
 						</DialogFooter>
