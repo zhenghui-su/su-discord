@@ -2,24 +2,18 @@
 
 import { Fragment, useRef, ElementRef } from "react"
 import { format } from "date-fns"
-import { Loader2, ServerCrash } from "lucide-react"
 import { Member, Message, Profile } from "@prisma/client"
+import { Loader2, ServerCrash } from "lucide-react"
 
-import { ChatWelcome } from "./chat-welcome"
 import { useChatQuery } from "@/hooks/use-chat-query"
-import { ChatItem } from "./chat-item"
 import { useChatSocket } from "@/hooks/use-chat-socket"
 import { useChatScroll } from "@/hooks/use-chat-scroll"
 
-/**
- * 日期格式化模板
- */
+import { ChatWelcome } from "./chat-welcome"
+import { ChatItem } from "./chat-item"
+
 const DATE_FORMAT = "d MMM yyyy, HH:mm"
 
-/**
- * 联合类型
- * 聊天消息包含发送成员及其个人资料类型
- */
 type MessageWithMemberWithProfile = Message & {
 	member: Member & {
 		profile: Profile
@@ -66,13 +60,7 @@ export const ChatMessages = ({
 			paramKey,
 			paramValue,
 		})
-
-	useChatSocket({
-		addKey,
-		updateKey,
-		queryKey,
-	})
-	// 处理最新消息自动滚动和滚动加载更多消息的Hook
+	useChatSocket({ queryKey, addKey, updateKey })
 	useChatScroll({
 		chatRef,
 		bottomRef,
@@ -106,18 +94,15 @@ export const ChatMessages = ({
 	return (
 		<div ref={chatRef} className='flex-1 flex flex-col py-4 overflow-y-auto'>
 			{!hasNextPage && <div className='flex-1' />}
-			{/* 欢迎内容 */}
 			{!hasNextPage && <ChatWelcome type={type} name={name} />}
 			{hasNextPage && (
 				<div className='flex justify-center'>
 					{isFetchingNextPage ? (
-						<Loader2 className='w-6 h-6 text-zinc-500 animate-spin my-4' />
+						<Loader2 className='h-6 w-6 text-zinc-500 animate-spin my-4' />
 					) : (
 						<button
 							onClick={() => fetchNextPage()}
-							className='text-zinc-500 hover:text-zinc-600
-							dark:text-zinc-400 dark:hover:text-zinc-300
-							text-xs my-4 transition'
+							className='text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 text-xs my-4 dark:hover:text-zinc-300 transition'
 						>
 							Load previous messages
 						</button>
@@ -125,7 +110,6 @@ export const ChatMessages = ({
 				</div>
 			)}
 			<div className='flex flex-col-reverse mt-auto'>
-				{/* 消息列表 */}
 				{data?.pages?.map((group, i) => (
 					<Fragment key={i}>
 						{group.items.map((message: MessageWithMemberWithProfile) => (

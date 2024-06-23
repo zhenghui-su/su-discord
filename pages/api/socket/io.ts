@@ -23,6 +23,7 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
 			// 创建一个新的 Socket.IO 服务器实例
 			path: path,
 			// 保证路径没有尾部斜杠, 即不会出现 /api/socket/io/
+			//@ts-ignore
 			addTrailingSlash: false,
 		})
 		res.socket.server.io = io // 将 io 实例附加到 res.socket.server

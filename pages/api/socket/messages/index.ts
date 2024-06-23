@@ -1,6 +1,6 @@
 import { NextApiRequest } from "next"
-import { NextApiResponseServerIo } from "@/types"
 
+import { NextApiResponseServerIo } from "@/types"
 import { currentProfilePages } from "@/lib/current-profile-pages"
 import { db } from "@/lib/db"
 
@@ -16,7 +16,7 @@ export default async function handler(
 	res: NextApiResponseServerIo
 ) {
 	if (req.method !== "POST") {
-		return res.status(405).json({ message: "Method not allowed" })
+		return res.status(405).json({ error: "Method not allowed" })
 	}
 
 	try {
@@ -25,23 +25,21 @@ export default async function handler(
 		const { serverId, channelId } = req.query
 
 		if (!profile) {
-			return res.status(401).json({ message: "Unauthorized" })
+			return res.status(401).json({ error: "Unauthorized" })
 		}
 
 		if (!serverId) {
-			return res.status(400).json({ message: "Server ID missing" })
+			return res.status(400).json({ error: "Server ID missing" })
 		}
 
 		if (!channelId) {
-			return res.status(400).json({ message: "Channel ID missing" })
+			return res.status(400).json({ error: "Channel ID missing" })
 		}
 
 		if (!content) {
-			return res.status(400).json({ message: "Content missing" })
+			return res.status(400).json({ error: "Content missing" })
 		}
-		/**
-		 * 聊天的服务器
-		 */
+
 		const server = await db.server.findFirst({
 			where: {
 				id: serverId as string,
@@ -59,9 +57,7 @@ export default async function handler(
 		if (!server) {
 			return res.status(404).json({ message: "Server not found" })
 		}
-		/**
-		 * 聊天的频道
-		 */
+
 		const channel = await db.channel.findFirst({
 			where: {
 				id: channelId as string,
@@ -76,7 +72,7 @@ export default async function handler(
 		 * 发送消息的成员
 		 */
 		const member = server.members.find(
-			(member) => member.profileId === profile.id
+			(member: any) => member.profileId === profile.id
 		)
 
 		if (!member) {
@@ -103,7 +99,7 @@ export default async function handler(
 		})
 
 		const channelKey = `chat:${channelId}:messages`
-		// 将消息通知到socket服务器
+
 		res?.socket?.server?.io?.emit(channelKey, message)
 
 		return res.status(200).json(message)

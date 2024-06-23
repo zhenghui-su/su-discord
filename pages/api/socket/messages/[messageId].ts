@@ -1,15 +1,16 @@
 import { NextApiRequest } from "next"
+import { MemberRole } from "@prisma/client"
 
 import { NextApiResponseServerIo } from "@/types"
 import { currentProfilePages } from "@/lib/current-profile-pages"
 import { db } from "@/lib/db"
-import { MemberRole } from "@prisma/client"
 
 /**
- * 用于处理编辑/删除所发聊天消息的API
+ * 用于处理编辑和删除聊天消息的API
  *
  * @param req
  * @param res
+ * @returns
  */
 export default async function handler(
 	req: NextApiRequest,
@@ -35,7 +36,7 @@ export default async function handler(
 		if (!channelId) {
 			return res.status(400).json({ error: "Channel ID missing" })
 		}
-		// 找到对应服务器
+
 		const server = await db.server.findFirst({
 			where: {
 				id: serverId as string,
@@ -54,7 +55,6 @@ export default async function handler(
 			return res.status(404).json({ error: "Server not found" })
 		}
 
-		// 找到对应频道
 		const channel = await db.channel.findFirst({
 			where: {
 				id: channelId as string,
@@ -66,16 +66,14 @@ export default async function handler(
 			return res.status(404).json({ error: "Channel not found" })
 		}
 
-		// 找到对应成员
 		const member = server.members.find(
-			(member) => member.profileId === profile.id
+			(member: any) => member.profileId === profile.id
 		)
 
 		if (!member) {
 			return res.status(404).json({ error: "Member not found" })
 		}
 
-		// 找到对应消息
 		let message = await db.message.findFirst({
 			where: {
 				id: messageId as string,
@@ -93,13 +91,10 @@ export default async function handler(
 		if (!message || message.deleted) {
 			return res.status(404).json({ error: "Message not found" })
 		}
-		// 是否是消息所发者
+
 		const isMessageOwner = message.memberId === member.id
-		// 是否是管理员
 		const isAdmin = member.role === MemberRole.ADMIN
-		// 是否是版主
 		const isModerator = member.role === MemberRole.MODERATOR
-		// 能否修改
 		const canModify = isMessageOwner || isAdmin || isModerator
 
 		if (!canModify) {
@@ -113,7 +108,7 @@ export default async function handler(
 				},
 				data: {
 					fileUrl: null,
-					content: "This message has been deleted",
+					content: "This message has been deleted.",
 					deleted: true,
 				},
 				include: {
@@ -128,9 +123,9 @@ export default async function handler(
 
 		if (req.method === "PATCH") {
 			if (!isMessageOwner) {
-				// 只有消息所有者才能修改
 				return res.status(401).json({ error: "Unauthorized" })
 			}
+
 			message = await db.message.update({
 				where: {
 					id: messageId as string,
@@ -150,7 +145,6 @@ export default async function handler(
 
 		const updateKey = `chat:${channelId}:messages:update`
 
-		// 通知socket服务器
 		res?.socket?.server?.io?.emit(updateKey, message)
 
 		return res.status(200).json(message)
