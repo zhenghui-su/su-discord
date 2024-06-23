@@ -1,28 +1,34 @@
-import { auth } from "@clerk/nextjs/server"
+import { redirectToSignIn } from "@clerk/nextjs"
 import { redirect } from "next/navigation"
 
-import { currentProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db"
 import { getOrCreateConversation } from "@/lib/conversation"
+import { currentProfile } from "@/lib/current-profile"
 import { ChatHeader } from "@/components/chat/chat-header"
+import { ChatMessages } from "@/components/chat/chat-messages"
+import { ChatInput } from "@/components/chat/chat-input"
+import { MediaRoom } from "@/components/media-room"
 
 interface MemberIdPageProps {
 	params: {
-		serverId: string
 		memberId: string
+		serverId: string
+	}
+	searchParams: {
+		video?: boolean
 	}
 }
 /**
  * 用于成员之间聊天的界面
  *
- * @param param0 传入服务器id和成员id
- * @returns 返回聊天界面
+ * @param param0
+ * @returns
  */
-const MemberIdPage = async ({ params }: MemberIdPageProps) => {
-	const profle = await currentProfile()
+const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
+	const profile = await currentProfile()
 
-	if (!profle) {
-		return auth().redirectToSignIn()
+	if (!profile) {
+		return redirectToSignIn()
 	}
 
 	/**
@@ -31,7 +37,7 @@ const MemberIdPage = async ({ params }: MemberIdPageProps) => {
 	const currentMember = await db.member.findFirst({
 		where: {
 			serverId: params.serverId,
-			profileId: profle.id,
+			profileId: profile.id,
 		},
 		include: {
 			profile: true,
@@ -55,20 +61,49 @@ const MemberIdPage = async ({ params }: MemberIdPageProps) => {
 	}
 	// 从聊天对话从获取两个成员
 	const { memberOne, memberTwo } = conversation
-	/**
-	 * 找到另一个成员-即你所点击需要聊天的对方
-	 */
-	const otherMember = memberOne.profileId === profle.id ? memberTwo : memberOne
+
+	const otherMember = memberOne.profileId === profile.id ? memberTwo : memberOne
 
 	return (
 		<div className='bg-white dark:bg-[#313338] flex flex-col h-full'>
 			{/* 成员聊天头部 */}
 			<ChatHeader
+				imageUrl={otherMember.profile.imageUrl}
 				name={otherMember.profile.name}
 				serverId={params.serverId}
-				imageUrl={otherMember.profile.imageUrl}
 				type='conversation'
 			/>
+			{/* 视频聊天-跳转去视频聊天室 */}
+			{searchParams.video && (
+				<MediaRoom chatId={conversation.id} video={true} audio={true} />
+			)}
+			{!searchParams.video && (
+				<>
+					{/* 聊天内容 */}
+					<ChatMessages
+						member={currentMember}
+						name={otherMember.profile.name}
+						chatId={conversation.id}
+						type='conversation'
+						apiUrl='/api/direct-messages'
+						paramKey='conversationId'
+						paramValue={conversation.id}
+						socketUrl='/api/socket/direct-messages'
+						socketQuery={{
+							conversationId: conversation.id,
+						}}
+					/>
+					{/* 输入框 */}
+					<ChatInput
+						name={otherMember.profile.name}
+						type='conversation'
+						apiUrl='/api/socket/direct-messages'
+						query={{
+							conversationId: conversation.id,
+						}}
+					/>
+				</>
+			)}
 		</div>
 	)
 }
