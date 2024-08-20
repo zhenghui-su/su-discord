@@ -5,8 +5,8 @@ import { useEffect, useState } from "react"
  *
  * @returns 返回当前用户的操作系统
  */
-export const useOS = (): string => {
-	const [os, setOS] = useState<string>("Other")
+export const useOS = (): "Mac" | "Windows" => {
+	const [os, setOS] = useState<"Mac" | "Windows">("Mac")
 
 	useEffect(() => {
 		const userAgent = window.navigator.userAgent
