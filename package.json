@@ -2,14 +2,22 @@
 	"name": "su-discord",
 	"version": "0.1.0",
 	"private": true,
+	"author": "suzhenghui",
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"prepare": "husky install"
+	},
+	"lint-staged": {
+		"**/*.{js,jsx,tsx,ts}": [
+			"eslint --fix"
+		]
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^4.23.2",
+		"@commitlint/config-conventional": "^19.4.1",
 		"@emoji-mart/data": "^1.1.2",
 		"@emoji-mart/react": "^1.1.1",
 		"@hookform/resolvers": "^3.3.0",
@@ -36,10 +44,13 @@
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.0.0",
 		"cmdk": "^0.2.0",
+		"commitlint": "^19.4.1",
 		"date-fns": "^2.30.0",
 		"emoji-mart": "^5.5.2",
 		"eslint": "8.47.0",
 		"eslint-config-next": "13.4.12",
+		"husky": "^8.0.3",
+		"lint-staged": "^13.2.1",
 		"livekit-client": "^1.13.0",
 		"livekit-server-sdk": "^1.2.6",
 		"lucide-react": "^0.268.0",
